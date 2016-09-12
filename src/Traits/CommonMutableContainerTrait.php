@@ -2,107 +2,71 @@
 
 namespace Collections\Traits;
 
-use Collections\ArrayList;
-use Collections\Dictionary;
+use Collections\Vector;
 use Collections\Iterable;
-use Collections\VectorInterface;
+use Collections\Iterator\LazyKeysIterable;
+use Collections\MapInterface;
+use Collections\Pair;
 
 trait CommonMutableContainerTrait
 {
-    use ExtractTrait;
+    /**
+     * {@inheritdoc}
+     */
+    public function addAll($items)
+    {
+        $this->validateTraversable($items);
+        $isMap = $items instanceof MapInterface;
+
+        foreach ($items as $key => $value) {
+            if (is_array($value)) {
+                $value = new static($value);
+            }
+
+            if ($isMap && !$value instanceof Pair) {
+                $value = new Pair($key, $value);
+            }
+
+            $this->add($value);
+        }
+    }
 
     /**
      * {@inheritdoc}
      */
     public function values()
     {
-        return new ArrayList($this);
+        return new Vector($this);
     }
 
-    public function toValuesArray()
+    public function keys()
     {
-        return $this->toArray();
+        return new Vector(new LazyKeysIterable($this));
     }
 
-    public function toKeysArray()
+    /**
+     * {@inheritDoc}
+     */
+    public function concat($iterable)
     {
-        $res = [];
-        foreach ($this as $k => $_) {
-            $res[] = $k;
+        if ($iterable instanceof Iterable) {
+            $iterable = $iterable->toArray();
         }
 
-        return $res;
+        return new static(array_merge_recursive($this->toArray(), $iterable));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function toArray()
+    public function clear()
     {
-        $arr = [];
-        foreach ($this as $key => $value) {
-            if ($value instanceof Iterable) {
-                $arr[$key] = $value->toArray();
-            } else {
-                $arr[$key] = $value;
-            }
-        }
+        $old = $this->container;
 
-        return $arr;
-    }
+        $this->container = [];
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function fromArray(array $arr)
-    {
-        $map = new static();
-        foreach ($arr as $k => $v) {
-            if (is_array($v)) {
-                $map[$k] = new static($v);
-            } else {
-                $map[$k] = $v;
-            }
-        }
+        unset($old);
 
-        return $map;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @return $this
-     */
-    public function groupBy($callback)
-    {
-        $callback = $this->propertyExtractor($callback);
-        $group = new Dictionary();
-        foreach ($this as $value) {
-            $key = $callback($value);
-            if (!$group->containsKey($key)) {
-                $element = $this instanceof VectorInterface ? new static([$value]) : new ArrayList([$value]);
-                $group->add($key, $element);
-            } else {
-                $value = $group->get($key)->add($value);
-                $group->set($key, $value);
-            }
-        }
-
-        return $group;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @return $this
-     */
-    public function indexBy($callback)
-    {
-        $callback = $this->propertyExtractor($callback);
-        $group = new Dictionary();
-        foreach ($this as $value) {
-            $key = $callback($value);
-            $group->set($key, $value);
-        }
-
-        return $group;
+        return $this;
     }
 }

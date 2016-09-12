@@ -6,8 +6,6 @@
 [![Latest Stable Version](http://img.shields.io/packagist/v/easyframework/collections.svg?style=flat-square)](https://packagist.org/packages/easyframework/collections)
 [![Downloads](https://img.shields.io/packagist/dt/easyframework/collections.svg?style=flat-square)](https://packagist.org/packages/easyframework/collections)
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/1f67b9bd-f120-43d5-9f02-f73aa6132d86/small.png)](https://insight.sensiolabs.com/projects/1f67b9bd-f120-43d5-9f02-f73aa6132d86)
-
 Collections Abstraction library for PHP
 
 The Collection library is one of the most useful things that many modern languages has, but for some reason PHP doesn't has a built in collection layer.
@@ -19,12 +17,8 @@ Take a look and see what we're talking about!!
 
 ## Install
 
-``` json
-{
-    "require": {
-        "easyframework/collections": "~5.0"
-    }
-}
+```bash
+composer require easyframework/collections
 ```
 
 ## Usage
@@ -46,7 +40,7 @@ The Collection represents the List in .NET language or simply non-associative ar
   $person3->name = 'Anderson';
   $person3->age = 15;
      
-  $collection = new Collections\ArrayList();
+  $collection = new Collections\Vector();
   $collection->add($person1);
   $collection->add($person2);
   $collection->add($person3);
@@ -60,20 +54,13 @@ The Collection represents the List in .NET language or simply non-associative ar
 
 ## Contributing
 
-Please see [CONTRIBUTING](https://github.com/LellysInformatica/collections/blob/master/CONTRIBUTING.md) for details.
-
-## Credits
-
-- [italolelis](https://github.com/italolelis)
-- [philipe](https://github.com/philipe)
-- [AyrtonRicardo](https://github.com/AyrtonRicardo)
-- [All Contributors](https://github.com/LellysInformatica/collections/contributors)
+Please see [CONTRIBUTING](https://github.com/italolelis/collections/blob/master/CONTRIBUTING.md) for details.
 
 ## License
 
-The MIT License (MIT). Please see [License File](https://github.com/LellysInformatica/collections/blob/master/LICENSE) for more information.
+The MIT License (MIT). Please see [License File](https://github.com/italolelis/collections/blob/master/LICENSE) for more information.
 
 ### Documentation
 
 More information can be found in the online documentation at
-http://collections.readthedocs.org/.
+https://italolelis.gitbooks.io/collections.

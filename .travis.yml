@@ -1,25 +1,22 @@
 language: php
 
 php:
-  - 5.5
   - 5.6
   - 7.0
+  - nightly
   - hhvm
+
+matrix:
+    fast_finish: true
+    allow_failures:
+        - php: nightly
 
 before_script:
   - composer self-update
   - composer install --prefer-dist
 
 script:
- - phpunit --coverage-clover=coverage.clover --configuration ./phpunit.xml.dist ./tests
-
+ - phpunit --coverage-clover build/logs/clover.xml --configuration ./phpunit.xml.dist ./tests
+ 
 after_script:
- - wget https://scrutinizer-ci.com/ocular.phar
- - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
-
-matrix:
-  allow_failures:
-    - php: 7.0
-
-notifications:
-  slack: vox-tecnologia:gMLOjny60q2cyfsdRe4dVkLO
+ - php bin/codacycoverage clover build/logs/clover.xml
